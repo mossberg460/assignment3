@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
 use Illuminate\Http\Request;
 
 class GamesController extends Controller {
@@ -11,7 +12,8 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view("index");
+      $games = Game::all();
+      return view('games.index', ['games' => $games]);
     }
 
     /**
@@ -20,7 +22,7 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('games.create');
     }
 
     /**
@@ -30,7 +32,13 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        $game = new Game;
+        $game->title = $request->input('title');
+        $game->price = $request->input('price');
+        $game->desc = $request->input('desc');
+        $game->image = $request->input('image');
+        $game->save();
+        return redirect()->route('games.index');
     }
 
     /**
@@ -40,7 +48,8 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $game = Game::find($id);
+        return view('games.show', ['game' => $game]);
     }
 
     /**
@@ -50,7 +59,8 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $game = Game::find($id);
+        return view('games.edit', ['game' => $game]);
     }
 
     /**
@@ -61,7 +71,13 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        $game = Game::find($id);
+        $game->title = $request->input('title');
+        $game->price = $request->input('price');
+        $game->desc = $request->input('desc');
+        $game->image = $request->input('image');
+        $game->save();
+        return redirect()->route('games.index');
     }
 
     /**
@@ -71,6 +87,7 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        Game::destroy($id);
+        return redirect()->route('games.index');
     }
 }

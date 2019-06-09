@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Game;
+use App\Rating;
+use App\Store;
+use App\GameStore;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class GamesController extends Controller {
-  
+
     public function __construct() {
       $this->middleware('auth')->except('index', 'show');
     }
@@ -27,7 +31,12 @@ class GamesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('games.create');
+      $game = new Game();
+      $game->stores = Store::all();
+
+      return view('games.create', ['game' => $game]);
+
+        //return view('games.create');
     }
 
     /**
@@ -43,6 +52,14 @@ class GamesController extends Controller {
         $game->desc = $request->input('desc');
         $game->image = $request->input('image');
         $game->save();
+
+        foreach ($request->get("stores") as $store) {
+          $game_store = new GameStore;
+          $game_store->store_id = $store;
+          $game_store->game_id = $game->id;
+          $game_store->save();
+        }
+
         return redirect()->route('games.index');
     }
 
@@ -54,6 +71,16 @@ class GamesController extends Controller {
      */
     public function show($id) {
         $game = Game::find($id);
+
+        $game->stores = DB::table('stores')
+        ->join('game_store', 'stores.id', '=', 'game_store.store_id')
+        ->where('game_store.game_id', '=', $id)->get();
+
+        $game->ratings =
+        Rating::join('users', 'users.id', '=', 'ratings.id')
+        ->select('ratings.*', 'users.name as name')
+        ->where('game_id', '=', $id)->get();
+
         return view('games.show', ['game' => $game]);
     }
 
@@ -65,6 +92,10 @@ class GamesController extends Controller {
      */
     public function edit($id) {
         $game = Game::find($id);
+        $game->stores = DB::table('stores')
+        ->join('game_store', 'stores.id', '=', 'game_store.store_id')
+        ->where('game_store.game_id', '=', $game->id)->get();
+
         return view('games.edit', ['game' => $game]);
     }
 

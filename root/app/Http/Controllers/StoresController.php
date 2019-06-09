@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
+use App\Rating;
 use App\Store;
+use App\GameStore;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class StoresController extends Controller {
@@ -26,7 +30,11 @@ class StoresController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('stores.create');
+      $store = new Store();
+
+      return view('stores/create', ['store' => $store]);
+
+        //return view('stores.create');
     }
 
     /**
@@ -51,7 +59,13 @@ class StoresController extends Controller {
      */
     public function show($id) {
       $store = Store::find($id);
-      return view('stores.show', ['store' => $store]);
+
+      $store->games = DB::table('games')
+      ->join('game_store', 'games.id', '=', 'game_store.game_id')
+      ->select('game_id as id', 'title')
+      ->where('game_store.store_id', '=', $id)->get();
+
+      //return view('stores.show', ['store' => $store]);
     }
 
     /**
@@ -60,8 +74,8 @@ class StoresController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-      $store = Store::find($id);
+    public function edit(Store $obj) {
+      $store = $obj;
       return view('stores.edit', ['store' => $store]);
     }
 
@@ -73,9 +87,9 @@ class StoresController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-      $game = Game::find($id);
-      $game->name = $request->input('name');
-      $game->city = $request->input('city');
+      $store = Store::find($obj->id);
+      $store->name = $request->input('name');
+      $store->city = $request->input('city');
       $game->save();
       return redirect()->route('stores.index');
     }
@@ -86,8 +100,8 @@ class StoresController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-      Store::destroy($id);
+    public function destroy(Request $request, Store $obj) {
+      Store::destroy($obj->id);
       return redirect()->route('stores.index');
     }
 }

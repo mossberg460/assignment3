@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource('/games', 'GamesController');
+Route::resource('/stores', 'StoresController');
 
 Auth::routes();
 

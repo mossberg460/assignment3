@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Store;
 use Illuminate\Http\Request;
 
-class StoresController extends Controller
-{
+class StoresController extends Controller {
+
+    public function __construct() {
+      $this->middleware('auth')->except('index', 'show');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+      $stores = Store::all();
+      return view('stores.index', ['stores' => $stores]);
     }
 
     /**
@@ -21,9 +25,8 @@ class StoresController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('stores.create');
     }
 
     /**
@@ -32,9 +35,12 @@ class StoresController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+      $store = new Store;
+      $store->name = $request->input('name');
+      $store->city = $request->input('city');
+      $store->save();
+      return redirect()->route('stores.index');
     }
 
     /**
@@ -43,9 +49,9 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show($id) {
+      $store = Store::find($id);
+      return view('stores.show', ['store' => $store]);
     }
 
     /**
@@ -54,9 +60,9 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id) {
+      $store = Store::find($id);
+      return view('stores.edit', ['store' => $store]);
     }
 
     /**
@@ -66,9 +72,12 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id) {
+      $game = Game::find($id);
+      $game->name = $request->input('name');
+      $game->city = $request->input('city');
+      $game->save();
+      return redirect()->route('stores.index');
     }
 
     /**
@@ -77,8 +86,8 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+      Store::destroy($id);
+      return redirect()->route('stores.index');
     }
 }

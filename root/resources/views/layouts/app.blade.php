@@ -37,9 +37,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('games.index') }}">Games</a>
                         </li>
+                        @if(Auth::check())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('games.create') }}">Add new game</a>
                         </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('stores.index') }}">Stores</a>
+                        </li>
+                        @if(Auth::check())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('stores.create') }}">Add new store</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

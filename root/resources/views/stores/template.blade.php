@@ -20,10 +20,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('games.index') }}">Stores <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ route('stores.index') }}">Stores <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('games.create') }}">Add game</a>
+                        <a class="nav-link" href="{{ route('stores.create') }}">Add store</a>
                     </li>
                 </ul>
             </div>

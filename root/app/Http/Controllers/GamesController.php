@@ -76,10 +76,16 @@ class GamesController extends Controller {
         ->join('game_store', 'stores.id', '=', 'game_store.store_id')
         ->where('game_store.game_id', '=', $id)->get();
 
-        $game->ratings =
-        Rating::join('users', 'users.id', '=', 'ratings.id')
-        ->select('ratings.*', 'users.name as name')
-        ->where('game_id', '=', $id)->get();
+        $game->ratings = DB::table('ratings')
+        ->join('games', 'ratings.game_id', '=', 'games.id')
+        ->where('games.id', '=', $id)->get();
+
+        /**
+        * $game->ratings =
+        * Rating::join('users', 'users.id', '=', 'ratings.id')
+        * ->select('ratings.*', 'users.name as name')
+        * ->where('game_id', '=', $id)->get();
+        **/
 
         return view('games.show', ['game' => $game]);
     }

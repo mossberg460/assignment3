@@ -65,7 +65,7 @@ class StoresController extends Controller {
       ->select('game_id as id', 'title')
       ->where('game_store.store_id', '=', $id)->get();
 
-      //return view('stores.show', ['store' => $store]);
+      return view('stores.show', ['store' => $store]);
     }
 
     /**

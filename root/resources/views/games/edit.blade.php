@@ -1,7 +1,11 @@
+@extends('layouts.app')
+
 @section('content')
+
 <h1>Edit: {{ $game->title }}</h1>
 
 <form action="{{ route('games.update', ['game' => $game->id]) }}" method="POST">
+  @csrf
   @method('PUT')
   <label for="title">Title</label>
   <input type="text" name="title" id="title" class="form-control">

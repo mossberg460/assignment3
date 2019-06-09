@@ -15,6 +15,11 @@
     <td>{{ $store->id }}</td>
     <td><a href="{{ route('stores.show', ['stores' => $store->id]) }}">{{ $store->name }}</a></td>
     <td>{{ $store->City }}</td>
+    @if(Auth::check())
+    <td>
+      @csrf
+      <a class="btn btn-primary" href="{{ route('stores.edit', ['id' => $store->id]) }}">Edit</a>
+    </td>
     <td>
       <form action="{{ route('stores.destroy', ['store' => $store->id]) }}" method="POST">
         @method('DELETE')
@@ -22,6 +27,7 @@
         <input type="submit" class="btn btn-danger" value="Delete">
       </form>
     </td>
+    @endif
   </tr>
 @endforeach
 </table>

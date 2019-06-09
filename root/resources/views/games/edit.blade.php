@@ -15,6 +15,19 @@
   <input type="text" name="desc" id="desc" class="form-control">
   <label for="image">Image</label>
   <input type="url" name="image" class="form-control">
+
+  <div class="form-group row">
+    <h4>Stores</h4>
+    <ul>
+      @foreach($game->stores as $store)
+      <li class="">
+        <label for="store_name">{{ $store->name }}</label>
+        <input type="checkbox" autofocus>
+      </li>
+      @endforeach
+    </ul>
+  </div>
+
   <hr>
   <input type="submit" class="btn btn-success" value="Update game">
 </form>
